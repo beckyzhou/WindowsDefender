@@ -23,6 +23,8 @@ public class TowerAI : Building {
     private float timer;
     protected AudioSource aSource;
 
+    public int[] Levels { get; set; }
+
     // Use this for initialization
     public TowerAI () {
         attackSpd = 0.5f;
@@ -37,6 +39,11 @@ public class TowerAI : Building {
         drainDuration = 0;
 
         timer = Time.time + attackSpd;
+
+        Levels = new int[3];
+        Levels[0] = 1;
+        Levels[1] = 1;
+        Levels[2] = 1;
     }
 
     void Start()
@@ -132,14 +139,30 @@ public class TowerAI : Building {
 	/// <param name="propertyName">Name of property of tower.</param>
 	/// <param name="newVal">New value of property.</param>
 	public void upgradeTower(string propertyName, object newVal)
-	{ 
-		FieldInfo info = this.GetType().GetField(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
+	{
+        switch (propertyName)
+        {
+            case "towerDamage": towerDamage = (int)newVal; Levels[0]++; break;
+            case "attackSpd": attackSpd = (float)newVal; Levels[1]++; break;
+            case "attackRange": attackRange = (float)newVal; Levels[2]++; break;
+        }
+    }
 
-		if (info != null)
-			info.SetValue (this, newVal);
-		else
-			Debug.Log("Field does not exist.");
-	}
+    /// <summary>
+    /// Returns Information of tower based on propertyName specified
+    /// </summary>
+    /// <param name="propertyName"></param>
+    public object getTowerInfo(string propertyName)
+    {
+        switch (propertyName)
+        {
+            case "towerDamage": return towerDamage;
+            case "attackSpd": return attackSpd;
+            case "attackRange": return attackRange;
+        }
+
+        return null;
+    }
 
     /// <summary>
     /// Created by Joel
@@ -168,8 +191,13 @@ public class TowerAI : Building {
         return toolTipContents;
     }
 
+    /// <summary>
+    /// When Tower is clicked, display upgrade options onto the panel
+    /// </summary>
     public void OnMouseDown()
     {
-        Debug.Log("Tower was clicked!");
+        GUI_PanelInterface panel = GameObject.FindGameObjectWithTag("GUI_PANEL").GetComponent<GUI_PanelInterface>();
+
+        panel.showTowerInfo(this);
     }
 }

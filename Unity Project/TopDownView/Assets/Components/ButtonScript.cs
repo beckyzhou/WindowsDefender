@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Reflection;
 
 public class ButtonScript : MonoBehaviour {
 
@@ -9,11 +10,18 @@ public class ButtonScript : MonoBehaviour {
     public GameObject SourceObject { get; set; }
     public BuildMode GameController { get; set; }
     public Texture2D backgroundTexture;
+    public string UpgradeTower { get; set; }
+    public int UpgradeTowerLevel { get; set; }
+    public object UpgradeTowerValue { get; set; }
+
     public bool Hide { get; set; }
+
 
     private string toolTipText = null;
     private GUIStyle guiStyleFore;
     private GUIStyle guiStyleBack;
+
+   
     
 
     // Use this for initialization
@@ -42,8 +50,13 @@ public class ButtonScript : MonoBehaviour {
     /// </summary>
     public void OnClick()
     {
-        if(SourceObject.GetComponent<Building>())
-            GameController.BuildTower(SourceObject.GetComponent<Building>());
+        if (SourceObject.GetComponent<Building>())
+        {
+            if (string.IsNullOrEmpty(UpgradeTower))
+                GameController.BuildTower(SourceObject.GetComponent<Building>());
+            else
+                upgradeTower();
+        }
         if (SourceObject.GetComponent<EnemyAI>())
             Debug.Log("Enemy Spawned");
     }
@@ -82,5 +95,41 @@ public class ButtonScript : MonoBehaviour {
             GUI.Label(new Rect(x - 1 - width/2, y - height, width, height), toolTipText, guiStyleBack);
             GUI.Label(new Rect(x - width/2, y - height, width, height), toolTipText, guiStyleFore);
         }
+    }
+
+    private void upgradeTower()
+    {
+        int towerDamage = 25;
+        float towerSpeed = 0.10f;
+        float towerRange = 0.5f;
+
+        TowerAI tower = SourceObject.GetComponent<TowerAI>();
+
+        object info = tower.getTowerInfo(UpgradeTower);
+
+        if (info != null)
+        {
+            if (UpgradeTowerLevel < 3) {
+
+                if (info.GetType() == typeof(int))
+                    UpgradeTowerValue = (int)info + (UpgradeTowerLevel * towerDamage);
+                else if (info.GetType() == typeof(float))
+                {
+                    switch (UpgradeTower)
+                    {
+                        case "attackSpd": UpgradeTowerValue = (float)info - (UpgradeTowerLevel * towerSpeed); break;
+                        case "attackRange": UpgradeTowerValue = (float)info + (UpgradeTowerLevel * towerRange); break;
+                    }
+                }
+
+                UpgradeTowerLevel++;
+                tower.upgradeTower(UpgradeTower, UpgradeTowerValue);
+            }
+        }
+
+        Debug.Log("Tower Property: " + UpgradeTower);
+        Debug.Log("Tower Value: " + info);
+        Debug.Log("Tower Upgrade Value: " + UpgradeTowerValue);
+        Debug.Log("Tower Property Type: " + info.GetType().ToString());
     }
 }
