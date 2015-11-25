@@ -16,4 +16,9 @@ public class HijackerEnemyAI : EnemyAI {
 
         return base.OnDeath();
     }
+
+    public override string ToolTip()
+    {
+        return base.ToolTip() + "\nSpeeds up nearby viruses on death";
+    }
 }

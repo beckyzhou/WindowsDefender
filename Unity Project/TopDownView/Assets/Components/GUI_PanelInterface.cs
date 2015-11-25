@@ -138,9 +138,10 @@ public class GUI_PanelInterface : MonoBehaviour
     /// <param name="tower"></param>
     public void showTowerInfo(TowerAI tower)
     {
-        int numButtons = 3;
+        int numButtons = 5;
 
-        if (buttonStatus != 0 && showButtons)
+
+        if (showButtons)
             removeButtons();
 
         if (!showButtons)
@@ -175,18 +176,25 @@ public class GUI_PanelInterface : MonoBehaviour
                 // Name of the object on Unity Editor
                 switch (i)
                 {
-                    case 0: newButton.name = "Upgrade Tower Attack"; newButton.UpgradeTower = "towerDamage"; break;
-                    case 1: newButton.name = "Upgrade Tower Attack Speed"; newButton.UpgradeTower = "attackSpd"; break;
-                    case 2: newButton.name = "Upgrade Tower Attack Range"; newButton.UpgradeTower = "attackRange"; break;
+                    case 0: newButton.name = "Tower Thumbnail"; newButton.UpgradeTower = "Image"; newButton.UpgradeTowerLevel = 4;  break;
+                    case 1: newButton.name = "Tower Information"; newButton.UpgradeTower = "Information"; newButton.UpgradeTowerLevel = 4; break;
+                    case 2: newButton.name = "Upgrade Tower Attack"; newButton.UpgradeTower = "towerDamage"; newButton.UpgradeTowerLevel = tower.Levels[0]; break;
+                    case 3: newButton.name = "Upgrade Tower Attack Speed"; newButton.UpgradeTower = "attackSpd"; newButton.UpgradeTowerLevel = tower.Levels[1]; break;
+                    case 4: newButton.name = "Upgrade Tower Attack Range"; newButton.UpgradeTower = "attackRange"; newButton.UpgradeTowerLevel = tower.Levels[2]; break;
                 }
 
-                newButton.UpgradeTowerLevel = tower.Levels[i];
-
-                if (newButton.UpgradeTowerLevel >= 3)
+                if (newButton.UpgradeTowerLevel == 3)
                     newButton.name += "(Maxed)";
 
                 // Text of the object to display in the game
                 newButton.gameObject.GetComponentInChildren<UnityEngine.UI.Text>().text = newButton.name;
+
+                if (i == 0)
+                {
+                    GameObject.Destroy(newButton.GetComponentInChildren<UnityEngine.UI.Text>());
+                    newButton.GetComponent<UnityEngine.UI.Button>().image.overrideSprite = tower.GetComponent<SpriteRenderer>().sprite;                    
+                    newButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
+                }
 
                 // Set the parent of the object to this object (GUI_Towers)
                 // If you don't then the object isn't part of the canvas / child of canvas

@@ -232,7 +232,7 @@ public class EnemyAI : MonoBehaviour
     /// Returns description of the Enemy
     /// </summary>
     /// <returns></returns>
-    public string ToolTip()
+    public virtual string ToolTip()
     {
         string toolTip = "";
         toolTip += name;

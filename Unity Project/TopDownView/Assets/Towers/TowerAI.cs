@@ -22,8 +22,12 @@ public class TowerAI : Building {
 
     private float timer;
     protected AudioSource aSource;
+    private bool showToolTip;
 
     public int[] Levels { get; set; }
+
+    private GUIStyle guiStyleFore;
+    private GUIStyle guiStyleBack;
 
     // Use this for initialization
     public TowerAI () {
@@ -44,6 +48,16 @@ public class TowerAI : Building {
         Levels[0] = 1;
         Levels[1] = 1;
         Levels[2] = 1;
+
+        // Tooltip
+        guiStyleFore = new GUIStyle();
+        guiStyleFore.normal.textColor = Color.white;
+        guiStyleFore.wordWrap = true;
+        guiStyleFore.alignment = TextAnchor.MiddleCenter;
+        guiStyleBack = new GUIStyle();
+        guiStyleBack.normal.textColor = Color.black;
+        guiStyleBack.alignment = TextAnchor.MiddleCenter;
+        guiStyleBack.wordWrap = true;
     }
 
     void Start()
@@ -170,8 +184,9 @@ public class TowerAI : Building {
     /// <returns></returns>
     public string ToolTip()
     {
-        string toolTipContents = "";
-        toolTipContents += name.Substring(0, name.Length - 5);
+        string toolTipContents = "";       
+
+        toolTipContents += name;
         toolTipContents += "\nCost: " + cost;
         toolTipContents += "\nDamage: " + towerDamage;
         toolTipContents += "\nAttack Speed: " + attackSpd;
@@ -199,5 +214,40 @@ public class TowerAI : Building {
         GUI_PanelInterface panel = GameObject.FindGameObjectWithTag("GUI_PANEL").GetComponent<GUI_PanelInterface>();
 
         panel.showTowerInfo(this);
+    }
+
+    /// <summary>
+    /// When mouse enters the button, get the tooltip text
+    /// </summary>
+    public void OnMouseEnter()
+    {
+        showToolTip = true;
+    }
+
+    /// <summary>
+    /// When mouse leaves the button, remove the tooltip text
+    /// </summary>
+    public void OnMouseExit()
+    {
+        showToolTip = false;
+    }
+
+    /// <summary>
+    /// Draws the tooltip onto the screen
+    /// </summary>
+    public void OnGUI()
+    {
+        if (showToolTip)
+        {
+            var x = Event.current.mousePosition.x;
+            var y = Event.current.mousePosition.y;
+            int width = 135;
+            int height = 135;
+
+            guiStyleBack.normal.background = GameObject.FindGameObjectWithTag("GUI_PANEL").GetComponent<GUI_PanelInterface>().buttonTemplate.backgroundTexture;
+
+            GUI.Label(new Rect(x - 1 - width / 2, y - height, width, height), ToolTip(), guiStyleBack);
+            GUI.Label(new Rect(x - width / 2, y - height, width, height), ToolTip(), guiStyleFore);
+        }
     }
 }

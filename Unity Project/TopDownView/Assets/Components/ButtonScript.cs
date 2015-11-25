@@ -13,6 +13,10 @@ public class ButtonScript : MonoBehaviour {
     public string UpgradeTower { get; set; }
     public int UpgradeTowerLevel { get; set; }
     public object UpgradeTowerValue { get; set; }
+    public int towerDamage;
+    public float towerSpeed;
+    public float towerRange;
+
 
     public bool Hide { get; set; }
 
@@ -43,6 +47,20 @@ public class ButtonScript : MonoBehaviour {
             transform.position = Vector2.MoveTowards(transform.position, MoveLocation, speed * Time.deltaTime);
         else if (Hide)
             Destroy(gameObject);
+
+        if (!string.IsNullOrEmpty(UpgradeTower))
+        {
+            if(string.Compare(UpgradeTower, "Information") == 0)
+            {
+                TowerAI tower = SourceObject.GetComponent<TowerAI>();
+                string text = "Damage Level \n" + tower.Levels[0]
+                    + "\nSpeed Level \n" + tower.Levels[1]
+                    + "\nRange Level \n" + tower.Levels[2];
+
+                GetComponentInChildren<UnityEngine.UI.Text>().text = text;
+                GetComponentInChildren<UnityEngine.UI.Text>().fontSize = 8;
+            }
+        }
 	}
 
     /// <summary>
@@ -85,7 +103,7 @@ public class ButtonScript : MonoBehaviour {
     /// </summary>
     public void OnGUI()
     {
-        if(toolTipText != null)
+        if(toolTipText != null && string.IsNullOrEmpty(UpgradeTower))
         {
             var x = Event.current.mousePosition.x;
             var y = Event.current.mousePosition.y;
@@ -99,10 +117,6 @@ public class ButtonScript : MonoBehaviour {
 
     private void upgradeTower()
     {
-        int towerDamage = 25;
-        float towerSpeed = 0.10f;
-        float towerRange = 0.5f;
-
         TowerAI tower = SourceObject.GetComponent<TowerAI>();
 
         object info = tower.getTowerInfo(UpgradeTower);
@@ -126,10 +140,5 @@ public class ButtonScript : MonoBehaviour {
                 tower.upgradeTower(UpgradeTower, UpgradeTowerValue);
             }
         }
-
-        Debug.Log("Tower Property: " + UpgradeTower);
-        Debug.Log("Tower Value: " + info);
-        Debug.Log("Tower Upgrade Value: " + UpgradeTowerValue);
-        Debug.Log("Tower Property Type: " + info.GetType().ToString());
     }
 }
