@@ -53,12 +53,12 @@ public class ButtonScript : MonoBehaviour {
             if(string.Compare(UpgradeTower, "Information") == 0)
             {
                 TowerAI tower = SourceObject.GetComponent<TowerAI>();
-                string text = "Damage Level \n" + tower.Levels[0]
-                    + "\nSpeed Level \n" + tower.Levels[1]
-                    + "\nRange Level \n" + tower.Levels[2];
+                string text = "Damage Level: " + tower.Levels[0]
+                    + "\nSpeed Level: " + tower.Levels[1]
+                    + "\nRange Level: " + tower.Levels[2];
 
                 GetComponentInChildren<UnityEngine.UI.Text>().text = text;
-                GetComponentInChildren<UnityEngine.UI.Text>().fontSize = 8;
+                GetComponentInChildren<UnityEngine.UI.Text>().fontSize = 9;
             }
         }
 	}

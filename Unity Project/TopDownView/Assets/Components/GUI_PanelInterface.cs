@@ -212,6 +212,8 @@ public class GUI_PanelInterface : MonoBehaviour
                     textRect.sizeDelta = new Vector2(textRect.rect.width + textButtonWidth, textRect.rect.height);
                     newPosition.x += textButtonWidth/2;
                     offsetX += textButtonWidth;
+                    newButton.GetComponent<UnityEngine.UI.Button>().image.color = Color.black;
+                    newButton.GetComponentInChildren<UnityEngine.UI.Text>().color = Color.white;
                 }
 
                 // Set the parent of the object to this object (GUI_Towers)
