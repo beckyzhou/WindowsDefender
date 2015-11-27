@@ -23,6 +23,7 @@ public class GUI_PanelInterface : MonoBehaviour
     private bool showButtons;
 
     private int buttonStatus; // 0 = None, 1 = AntiVirus, 2 = Virus
+    private TowerAI selectedTower;
 
     // Use this for initialization
     void Start()
@@ -139,7 +140,11 @@ public class GUI_PanelInterface : MonoBehaviour
     public void showTowerInfo(TowerAI tower)
     {
         int numButtons = 5;
-
+        int textButtonWidth = 50;
+        
+        if(selectedTower != null)
+            if(selectedTower == tower)
+                return;
 
         if (showButtons)
             removeButtons();
@@ -147,6 +152,8 @@ public class GUI_PanelInterface : MonoBehaviour
         if (!showButtons)
         {
             buttonStatus = 0;
+
+            selectedTower = tower;
 
             // Hard-coded value
             int offsetX = 270;
@@ -194,6 +201,17 @@ public class GUI_PanelInterface : MonoBehaviour
                     GameObject.Destroy(newButton.GetComponentInChildren<UnityEngine.UI.Text>());
                     newButton.GetComponent<UnityEngine.UI.Button>().image.overrideSprite = tower.GetComponent<SpriteRenderer>().sprite;                    
                     newButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
+                }
+
+
+                // Tower Description
+                if(i == 1)
+                {
+                    RectTransform textRect = newButton.GetComponent<RectTransform>();
+
+                    textRect.sizeDelta = new Vector2(textRect.rect.width + textButtonWidth, textRect.rect.height);
+                    newPosition.x += textButtonWidth/2;
+                    offsetX += textButtonWidth;
                 }
 
                 // Set the parent of the object to this object (GUI_Towers)
