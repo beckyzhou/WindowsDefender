@@ -178,9 +178,9 @@ public class GUI_PanelInterface : MonoBehaviour
                 {
                     case 0: newButton.name = "Tower Thumbnail"; newButton.UpgradeTower = "Image"; newButton.UpgradeTowerLevel = 4;  break;
                     case 1: newButton.name = "Tower Information"; newButton.UpgradeTower = "Information"; newButton.UpgradeTowerLevel = 4; break;
-                    case 2: newButton.name = "Upgrade Tower Attack"; newButton.UpgradeTower = "towerDamage"; newButton.UpgradeTowerLevel = tower.Levels[0]; break;
-                    case 3: newButton.name = "Upgrade Tower Attack Speed"; newButton.UpgradeTower = "attackSpd"; newButton.UpgradeTowerLevel = tower.Levels[1]; break;
-                    case 4: newButton.name = "Upgrade Tower Attack Range"; newButton.UpgradeTower = "attackRange"; newButton.UpgradeTowerLevel = tower.Levels[2]; break;
+                    case 2: newButton.name = "Upgrade Attack Strength"; newButton.UpgradeTower = "towerDamage"; newButton.UpgradeTowerLevel = tower.Levels[0]; break;
+                    case 3: newButton.name = "Upgrade  Attack  Speed"; newButton.UpgradeTower = "attackSpd"; newButton.UpgradeTowerLevel = tower.Levels[1]; break;
+                    case 4: newButton.name = "Upgrade  Attack  Range"; newButton.UpgradeTower = "attackRange"; newButton.UpgradeTowerLevel = tower.Levels[2]; break;
                 }
 
                 if (newButton.UpgradeTowerLevel == 3)
